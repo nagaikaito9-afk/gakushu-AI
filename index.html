@@ -3,31 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 法則推論シミュレーター</title>
+    <title>AI 法則推論シミュレーター Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>AI Rule Inference Simulator</h1>
-            <p>あなたが与えたデータから、AIが隠された「数式」を推理します</p>
+            <p>データに隠された「数式」を推理し、法則を視覚化します</p>
         </header>
 
         <div class="dashboard">
             <div class="panel data-panel">
                 <h2>📝 1. AIに例題（データ）を与える</h2>
-                <p>AIに法則を見つけさせたい例題を入力してください。<br>
-                <small>※データが1つだけだと法則が絞れないので、2〜3個以上入力してください。</small></p>
-                
                 <div class="input-form">
-                    A: <input type="number" id="input-a" placeholder="例: 2">
-                    B: <input type="number" id="input-b" placeholder="例: 3">
-                    答え: <input type="number" id="input-ans" placeholder="例: 5">
-                    <button id="addDataBtn">データを追加</button>
+                    A = <input type="number" id="input-a" placeholder="2">
+                    B = <input type="number" id="input-b" placeholder="3">
+                    答え = <input type="number" id="input-ans" placeholder="5">
+                    <button id="addDataBtn">追加</button>
                 </div>
-
-                <ul id="dataset-list" class="dataset-list">
-                    </ul>
+                <ul id="dataset-list" class="dataset-list"></ul>
             </div>
 
             <div class="panel brain-panel">
@@ -35,24 +30,38 @@
                 <div class="controls">
                     <button id="startBtn" class="btn-primary">学習スタート</button>
                     <button id="pauseBtn">一時停止</button>
-                    <button id="resetBtn" class="btn-danger">脳をリセット</button>
+                    <button id="resetBtn" class="btn-danger">リセット</button>
                 </div>
 
                 <div class="formula-box">
                     <p>💡 AIが導き出した現在の数式</p>
-                    <div class="equation">
-                        答え ＝ (A × <span id="w1-val" class="highlight">0.00</span>) ＋ (B × <span id="w2-val" class="highlight">0.00</span>) ＋ <span id="b-val" class="highlight">0.00</span>
+                    <div id="dynamic-equation" class="equation">
+                        <span class="math-y">答え</span> = <span id="eq-w1">0.00</span><span class="math-var">A</span> <span id="eq-sign-w2">+</span> <span id="eq-w2">0.00</span><span class="math-var">B</span> <span id="eq-sign-b">+</span> <span id="eq-b">0.00</span>
                     </div>
                 </div>
 
                 <div class="stats">
-                    <p>推理回数 (Epoch): <span id="epoch-count">0</span> 回</p>
-                    <p>データとのズレ (Loss): <span id="loss-text">0.000</span></p>
+                    <p>推理回数: <span id="epoch-count">0</span> 回 / ズレ (Loss): <span id="loss-text">0.000</span></p>
                 </div>
-
                 <div class="graph-container">
-                    <canvas id="lossChart" width="350" height="150"></canvas>
-                    <small>↑ ズレがゼロ（一番下）になれば、完璧な数式を見つけた証拠です</small>
+                    <canvas id="lossChart" width="350" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-panel" class="panel result-panel hidden">
+            <h2>🎉 法則を発見しました！</h2>
+            <div class="result-content">
+                <div class="explanation">
+                    <h3>💬 AIの解説</h3>
+                    <p id="rule-description" class="rule-text">ここに解説が表示されます。</p>
+                    <h3>🤔 なぜこの式になったか？</h3>
+                    <p id="rule-reason" class="rule-reason-text">ここに理由が表示されます。</p>
+                </div>
+                <div class="visualization">
+                    <h3>🗺️ 法則の全体図（ヒートマップ）</h3>
+                    <canvas id="rule-canvas" width="250" height="250"></canvas>
+                    <p class="caption">※ 横軸がA、縦軸がB。色が答えの大きさ（赤=大、青=小）を表し、白丸があなたが入力したデータです。</p>
                 </div>
             </div>
         </div>
