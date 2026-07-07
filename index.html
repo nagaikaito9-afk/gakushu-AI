@@ -3,65 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ひらめきシミュレーター</title>
+    <title>AI ひらめきシミュレーター Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>AI ひらめきシミュレーター 💡</h1>
-            <p>あなたが作った「謎のルール（データ）」を、AIが自力で解読する様子を観察しよう！</p>
+            <p>データ保存・検証チャット・複雑記号解読モード搭載！</p>
         </header>
 
         <div class="settings-panel panel">
-            <h2>⚙️ 1. 実験の準備（データの形とAIの考えるスピード）</h2>
+            <h2>⚙️ 1. モードと設定</h2>
             <div class="settings-container">
                 <div class="setting-row">
-                    <label for="variable-count">手がかりの数：</label>
+                    <label>🧠 モード選択：</label>
+                    <select id="mode-select">
+                        <option value="standard" selected>通常モード (変数の重みを学習)</option>
+                        <option value="complex">複雑モード (文字列から謎の記号を解読)</option>
+                    </select>
+                </div>
+                <div class="setting-row" id="var-count-container">
+                    <label>手がかりの数：</label>
                     <select id="variable-count">
                         <option value="1">1つ (Aだけ)</option>
                         <option value="2" selected>2つ (A と B)</option>
                         <option value="3">3つ (A, B, C)</option>
-                        <option value="4">4つ (A, B, C, D)</option>
                     </select>
                 </div>
                 <div class="setting-row">
-                    <label for="speed-slider">AIの学習スピード：</label>
+                    <label>スピード：</label>
                     <input type="range" id="speed-slider" min="1" max="100" value="1">
-                    <span id="speed-val" class="highlight-val">1</span> 倍速
+                    <span id="speed-val" class="highlight-val">1</span>倍速
                 </div>
             </div>
-            <span class="warning-text">※手がかりの数を変えると、入力したデータは一度リセットされます。</span>
         </div>
 
         <div class="dashboard">
             <div class="panel data-panel">
                 <h2>📝 2. AIにヒント（データ）を教える</h2>
-                
                 <div class="sample-box">
-                    <label>📖 面白いルールを試す：</label>
-                    <select id="sample-select">
-                        <option value="">-- 選んでね --</option>
-                        <option value="add">足し算 (A + B)</option>
-                        <option value="double_a">Aの2倍 (Bは無視)</option>
-                        <option value="complex">複雑な計算 (2A - B + 5)</option>
-                        <option value="average">平均値 ((A+B)/2)</option>
-                    </select>
-                    <button id="loadSampleBtn">データをセット！</button>
+                    <button id="saveCluesBtn">💾 現在の手がかりを保存</button>
+                    <button id="loadCluesBtn">📂 保存した手がかりを復元</button>
                 </div>
 
-                <p class="guide-text">自分で好きな例題を入力してもOKだよ！</p>
                 <div id="dynamic-input-form" class="input-form">
                     </div>
                 
                 <div class="table-container">
                     <table id="data-table">
-                        <thead>
-                            <tr id="table-header"></tr>
-                        </thead>
+                        <thead><tr id="table-header"></tr></thead>
                         <tbody id="table-body"></tbody>
                     </table>
-                    <div id="no-data-msg" class="no-data">まだデータがありません。例題を入力してね！</div>
                 </div>
             </div>
 
@@ -72,21 +65,13 @@
                     <button id="pauseBtn">⏸️ 一時停止</button>
                     <button id="resetBtn" class="btn-danger">🔄 記憶をリセット</button>
                 </div>
-
                 <div class="formula-box">
                     <p>💡 AIが手探りで組み立てている「ルール」</p>
-                    <div id="dynamic-equation" class="equation">
-                        </div>
+                    <div id="dynamic-equation" class="equation"></div>
                 </div>
-
                 <div class="stats">
                     <p>考え直した回数: <span id="epoch-count" class="highlight-val">0</span> 回</p>
-                    <p>間違いの大きさ (0になれば大正解!): <span id="loss-text" class="highlight-val">0.00000</span></p>
-                </div>
-
-                <div class="graph-container">
-                    <canvas id="lossChart" width="350" height="100"></canvas>
-                    <p class="caption">↑ 線が一番下（ゼロ）にピタッとつけば、ルール発見です！</p>
+                    <p>間違いの大きさ: <span id="loss-text" class="highlight-val">0.00000</span></p>
                 </div>
             </div>
         </div>
@@ -97,21 +82,28 @@
                 <div class="explanation">
                     <h3>💬 AIによる「謎のルール」の解説</h3>
                     <div id="rule-description" class="rule-text"></div>
-                    
-                    <div class="prediction-box">
-                        <h3>🎯 新しい機能：AIをテストしてみよう！</h3>
-                        <p>見つけたルールを使って、AIに新しい問題を解かせてみよう。数値を入力してね。</p>
-                        <div id="predict-inputs" class="predict-inputs">
-                            </div>
-                        <button id="predictBtn">AIに答えを予想させる</button>
-                        <div class="predict-result">🤖 AIの予想：「<span id="predict-answer">???</span>」ですね！</div>
-                    </div>
-
+                    <button id="saveRuleBtn" class="btn-primary" style="margin-top:15px; width:100%;">💾 このルールを保存して検証ルームへ送る</button>
                 </div>
-                <div class="visualization">
-                    <h3>🗺️ ルールのイメージ図</h3>
-                    <canvas id="visual-canvas" width="300" height="300"></canvas>
-                    <p id="visual-caption" class="caption"></p>
+            </div>
+        </div>
+
+        <div class="panel saved-rules-panel">
+            <h2>🧪 5. 検証ルーム（保存されたルール）</h2>
+            <p class="guide-text">保存したルールを呼び出して、AIをテストしたり矛盾を指摘されたりできます。</p>
+            <div id="saved-rules-list" class="rules-list">
+                <p style="color:#62688f;">まだ保存されたルールはありません。</p>
+            </div>
+            
+            <div id="test-room" class="test-room hidden">
+                <h3 style="color:var(--primary-color);">🤖 AIテストチャット</h3>
+                <p id="test-room-info" style="font-size: 0.9rem; color: #a9aec4;"></p>
+                
+                <div id="test-chat-log" class="chat-log"></div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input-q" placeholder="例: Aが2でBが3の時..." style="flex:2;">
+                    <input type="number" id="chat-input-a" placeholder="答えの予想" style="flex:1;">
+                    <button id="chatSendBtn">出題する！</button>
                 </div>
             </div>
         </div>
