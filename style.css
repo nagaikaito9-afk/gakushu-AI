@@ -35,14 +35,16 @@ header p { margin: 0; color: #8b92b6; font-size: 0.95rem; }
 .panel h2 { font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 0; color: #fff; }
 
 .settings-panel { display: flex; flex-direction: column; }
-.setting-row { display: flex; align-items: center; gap: 15px; font-size: 0.95rem; }
+.settings-container { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 10px; }
+.setting-row { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; background: #131520; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); }
 .setting-row select { background: #0f111a; color: #fff; border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-.warning-text { color: #ffb300; font-size: 0.8rem; }
+.setting-row input[type=range] { cursor: pointer; }
+.highlight-val { color: var(--primary-color); font-weight: bold; font-family: monospace; font-size: 1.1rem; min-width: 30px; display: inline-block; text-align: right;}
+.warning-text { color: #ffb300; font-size: 0.8rem; margin-top: 5px; }
 
 .dashboard { display: flex; gap: 20px; flex-wrap: wrap; }
 .data-panel, .brain-panel { flex: 1; min-width: 450px; display: flex; flex-direction: column; }
 
-/* 入力フォームの改善 */
 .input-form {
     display: flex;
     gap: 10px;
@@ -59,7 +61,6 @@ header p { margin: 0; color: #8b92b6; font-size: 0.95rem; }
 .input-group input:focus { border-color: var(--primary-color); outline: none; }
 .input-group.target-group { border-left: 2px dashed #444; padding-left: 10px; margin-left: 5px; }
 
-/* テーブルスタイル */
 .table-container {
     flex: 1;
     max-height: 280px;
@@ -74,14 +75,12 @@ th { background-color: #1a1c29; color: #8b92b6; position: sticky; top: 0; z-inde
 tr:hover { background-color: var(--table-hover); }
 .no-data { text-align: center; padding: 30px; color: #62688f; font-style: italic; }
 
-/* アクションボタン */
 .action-btn { padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; border: 1px solid transparent; cursor: pointer; font-weight: normal; margin: 0 2px;}
 .edit-btn { border-color: var(--secondary-color); color: var(--secondary-color); }
 .edit-btn:hover { background: var(--secondary-color); color: #000; }
 .del-btn { border-color: var(--error-color); color: var(--error-color); }
 .del-btn:hover { background: var(--error-color); color: #fff; }
 
-/* コントロール */
 .controls { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; }
 button { background-color: transparent; color: var(--text-color); border: 1px solid var(--primary-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;}
 button:hover { background-color: var(--primary-color); color: #000; box-shadow: 0 0 8px rgba(0,229,255,0.4); }
@@ -89,7 +88,6 @@ button.btn-primary { background-color: rgba(0, 229, 255, 0.08); }
 button.btn-danger { border-color: var(--error-color); color: var(--error-color); }
 button.btn-danger:hover { background-color: var(--error-color); color: #fff; box-shadow: 0 0 8px rgba(255,82,82,0.4); }
 
-/* 数式表示 */
 .formula-box { background-color: #07080d; padding: 18px; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); margin-bottom: 15px; }
 .formula-box p { margin: 0 0 8px 0; color: #62688f; font-size: 0.85rem;}
 .equation { font-size: 1.4rem; font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px; }
@@ -104,7 +102,6 @@ button.btn-danger:hover { background-color: var(--error-color); color: #fff; box
 canvas { background-color: #07080d; border: 1px solid var(--border-color); border-radius: 6px; }
 .caption { font-size: 0.75rem; color: #62688f; margin: 4px 0 0 0; text-align: center; }
 
-/* レポート */
 .hidden { display: none !important; }
 .result-panel { border-color: var(--primary-color); animation: fadeIn 0.4s ease-out; }
 .result-panel h2 { color: var(--primary-color); border-bottom-color: rgba(0,229,255,0.2); }

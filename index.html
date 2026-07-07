@@ -14,43 +14,45 @@
         </header>
 
         <div class="settings-panel panel">
-            <h2>⚙️ 1. 設定変更（データの形を決める）</h2>
-            <div class="setting-row">
-                <label for="variable-count">入力する数字（変数）の数：</label>
-                <select id="variable-count">
-                    <option value="1">1つ (A)</option>
-                    <option value="2" selected>2つ (A, B)</option>
-                    <option value="3">3つ (A, B, C)</option>
-                    <option value="4">4つ (A, B, C, D)</option>
-                </select>
-                <span class="warning-text">※数を変更すると現在のデータはリセットされます</span>
+            <h2>⚙️ 1. 設定変更（データの形と学習スピード）</h2>
+            <div class="settings-container">
+                <div class="setting-row">
+                    <label for="variable-count">入力する数字（変数）の数：</label>
+                    <select id="variable-count">
+                        <option value="1">1つ (A)</option>
+                        <option value="2" selected>2つ (A, B)</option>
+                        <option value="3">3つ (A, B, C)</option>
+                        <option value="4">4つ (A, B, C, D)</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label for="speed-slider">学習スピード：</label>
+                    <input type="range" id="speed-slider" min="1" max="100" value="1">
+                    <span id="speed-val" class="highlight-val">1</span> 倍速
+                </div>
             </div>
+            <span class="warning-text">※変数の数を変更すると現在のデータはリセットされます</span>
         </div>
 
         <div class="dashboard">
-            <!-- データ管理パネル -->
             <div class="panel data-panel">
                 <h2>📝 2. 例題（データ）の管理</h2>
                 <div id="dynamic-input-form" class="input-form">
-                    <!-- ここに変数の数に応じた入力欄が動的に生成される -->
-                </div>
+                    </div>
                 
                 <div class="table-container">
                     <table id="data-table">
                         <thead>
                             <tr id="table-header">
-                                <!-- 動的にヘッダー生成 -->
-                            </tr>
+                                </tr>
                         </thead>
                         <tbody id="table-body">
-                            <!-- データ行がここに追加される -->
-                        </tbody>
+                            </tbody>
                     </table>
                     <div id="no-data-msg" class="no-data">データが登録されていません</div>
                 </div>
             </div>
 
-            <!-- AI学習パネル -->
             <div class="panel brain-panel">
                 <h2>🧠 3. AIの脳内（純粋な数値データの関係性）</h2>
                 <div class="controls">
@@ -62,8 +64,7 @@
                 <div class="formula-box">
                     <p>💡 AIが手探りで構築中の数式モデル</p>
                     <div id="dynamic-equation" class="equation">
-                        <!-- 動的に数式が組み立てられる -->
-                    </div>
+                        </div>
                 </div>
 
                 <div class="stats">
@@ -78,7 +79,6 @@
             </div>
         </div>
 
-        <!-- 学習完了時の詳細レポート -->
         <div id="result-panel" class="panel result-panel hidden">
             <h2>📊 4. AIによるデータの関係性レポート（法則の発見）</h2>
             <div class="result-content">
