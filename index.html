@@ -3,93 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 完全ゼロベース法則推論シミュレーター</title>
+    <title>AI ひらめきシミュレーター</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>AI 完全ゼロベース法則推論シミュレーター</h1>
-            <p>人間が定義した「四則演算」の記憶すら持たないAIが、データの関係性（重み）のみを純粋に学習します</p>
+            <h1>AI ひらめきシミュレーター 💡</h1>
+            <p>あなたが作った「謎のルール（データ）」を、AIが自力で解読する様子を観察しよう！</p>
         </header>
 
         <div class="settings-panel panel">
-            <h2>⚙️ 1. 設定変更（データの形と学習スピード）</h2>
+            <h2>⚙️ 1. 実験の準備（データの形とAIの考えるスピード）</h2>
             <div class="settings-container">
                 <div class="setting-row">
-                    <label for="variable-count">入力する数字（変数）の数：</label>
+                    <label for="variable-count">手がかりの数：</label>
                     <select id="variable-count">
-                        <option value="1">1つ (A)</option>
-                        <option value="2" selected>2つ (A, B)</option>
+                        <option value="1">1つ (Aだけ)</option>
+                        <option value="2" selected>2つ (A と B)</option>
                         <option value="3">3つ (A, B, C)</option>
                         <option value="4">4つ (A, B, C, D)</option>
                     </select>
                 </div>
                 <div class="setting-row">
-                    <label for="speed-slider">学習スピード：</label>
+                    <label for="speed-slider">AIの学習スピード：</label>
                     <input type="range" id="speed-slider" min="1" max="100" value="1">
                     <span id="speed-val" class="highlight-val">1</span> 倍速
                 </div>
             </div>
-            <span class="warning-text">※変数の数を変更すると現在のデータはリセットされます</span>
+            <span class="warning-text">※手がかりの数を変えると、入力したデータは一度リセットされます。</span>
         </div>
 
         <div class="dashboard">
             <div class="panel data-panel">
-                <h2>📝 2. 例題（データ）の管理</h2>
+                <h2>📝 2. AIにヒント（データ）を教える</h2>
+                <p class="guide-text">「Aが〇〇で、Bが〇〇のとき、答えは〇〇になる」という例題をいくつか入力してね。</p>
                 <div id="dynamic-input-form" class="input-form">
                     </div>
                 
                 <div class="table-container">
                     <table id="data-table">
                         <thead>
-                            <tr id="table-header">
-                                </tr>
+                            <tr id="table-header"></tr>
                         </thead>
-                        <tbody id="table-body">
-                            </tbody>
+                        <tbody id="table-body"></tbody>
                     </table>
-                    <div id="no-data-msg" class="no-data">データが登録されていません</div>
+                    <div id="no-data-msg" class="no-data">まだデータがありません。例題を入力してね！</div>
                 </div>
             </div>
 
             <div class="panel brain-panel">
-                <h2>🧠 3. AIの脳内（純粋な数値データの関係性）</h2>
+                <h2>🧠 3. AIの脳内（ひらめきプロセス）</h2>
                 <div class="controls">
-                    <button id="startBtn" class="btn-primary">学習スタート</button>
-                    <button id="pauseBtn">一時停止</button>
-                    <button id="resetBtn" class="btn-danger">脳の記憶を完全消去</button>
+                    <button id="startBtn" class="btn-primary">▶️ 学習スタート</button>
+                    <button id="pauseBtn">⏸️ 一時停止</button>
+                    <button id="resetBtn" class="btn-danger">🔄 記憶をリセット</button>
                 </div>
 
                 <div class="formula-box">
-                    <p>💡 AIが手探りで構築中の数式モデル</p>
+                    <p>💡 AIが手探りで組み立てている「ルール」</p>
                     <div id="dynamic-equation" class="equation">
                         </div>
                 </div>
 
                 <div class="stats">
-                    <p>試行回数 (Epoch): <span id="epoch-count">0</span> 回</p>
-                    <p>全体のズレ (Loss): <span id="loss-text">0.00000</span></p>
+                    <p>考え直した回数: <span id="epoch-count" class="highlight-val">0</span> 回</p>
+                    <p>間違いの大きさ (0になれば大正解!): <span id="loss-text" class="highlight-val">0.00000</span></p>
                 </div>
 
                 <div class="graph-container">
                     <canvas id="lossChart" width="350" height="100"></canvas>
-                    <p class="caption">誤差（ズレ）の減少グラフ</p>
+                    <p class="caption">↑ 線が一番下（ゼロ）にピタッとつけば、ルール発見です！</p>
                 </div>
             </div>
         </div>
 
         <div id="result-panel" class="panel result-panel hidden">
-            <h2>📊 4. AIによるデータの関係性レポート（法則の発見）</h2>
+            <h2>🎉 4. AIがルールをひらめきました！</h2>
             <div class="result-content">
                 <div class="explanation">
-                    <h3>💬 AIによる数値の解析結果</h3>
-                    <p id="rule-description" class="rule-text"></p>
-                    <h3>🧐 パラメータ（重み）の数学的解釈</h3>
-                    <p id="rule-reason" class="rule-reason-text"></p>
+                    <h3>💬 AIによる「謎のルール」の解説</h3>
+                    <div id="rule-description" class="rule-text"></div>
+                    <div class="ai-commentary">
+                        <strong>🤖 AIからのコメント：</strong><br>
+                        <p id="rule-reason" class="rule-reason-text"></p>
+                    </div>
                 </div>
                 <div class="visualization">
-                    <h3>🗺️ 法則の視覚化グラフ</h3>
+                    <h3>🗺️ ルールのイメージ図</h3>
                     <canvas id="visual-canvas" width="300" height="300"></canvas>
                     <p id="visual-caption" class="caption"></p>
                 </div>
