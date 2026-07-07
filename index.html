@@ -3,65 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 法則推論シミュレーター Pro</title>
+    <title>AI 完全ゼロベース法則推論シミュレーター</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>AI Rule Inference Simulator</h1>
-            <p>データに隠された「数式」を推理し、法則を視覚化します</p>
+            <h1>AI 完全ゼロベース法則推論シミュレーター</h1>
+            <p>人間が定義した「四則演算」の記憶すら持たないAIが、データの関係性（重み）のみを純粋に学習します</p>
         </header>
 
+        <div class="settings-panel panel">
+            <h2>⚙️ 1. 設定変更（データの形を決める）</h2>
+            <div class="setting-row">
+                <label for="variable-count">入力する数字（変数）の数：</label>
+                <select id="variable-count">
+                    <option value="1">1つ (A)</option>
+                    <option value="2" selected>2つ (A, B)</option>
+                    <option value="3">3つ (A, B, C)</option>
+                    <option value="4">4つ (A, B, C, D)</option>
+                </select>
+                <span class="warning-text">※数を変更すると現在のデータはリセットされます</span>
+            </div>
+        </div>
+
         <div class="dashboard">
+            <!-- データ管理パネル -->
             <div class="panel data-panel">
-                <h2>📝 1. AIに例題（データ）を与える</h2>
-                <div class="input-form">
-                    A = <input type="number" id="input-a" placeholder="2">
-                    B = <input type="number" id="input-b" placeholder="3">
-                    答え = <input type="number" id="input-ans" placeholder="5">
-                    <button id="addDataBtn">追加</button>
+                <h2>📝 2. 例題（データ）の管理</h2>
+                <div id="dynamic-input-form" class="input-form">
+                    <!-- ここに変数の数に応じた入力欄が動的に生成される -->
                 </div>
-                <ul id="dataset-list" class="dataset-list"></ul>
+                
+                <div class="table-container">
+                    <table id="data-table">
+                        <thead>
+                            <tr id="table-header">
+                                <!-- 動的にヘッダー生成 -->
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- データ行がここに追加される -->
+                        </tbody>
+                    </table>
+                    <div id="no-data-msg" class="no-data">データが登録されていません</div>
+                </div>
             </div>
 
+            <!-- AI学習パネル -->
             <div class="panel brain-panel">
-                <h2>🧠 2. AIの推理（学習プロセス）</h2>
+                <h2>🧠 3. AIの脳内（純粋な数値データの関係性）</h2>
                 <div class="controls">
                     <button id="startBtn" class="btn-primary">学習スタート</button>
                     <button id="pauseBtn">一時停止</button>
-                    <button id="resetBtn" class="btn-danger">リセット</button>
+                    <button id="resetBtn" class="btn-danger">脳の記憶を完全消去</button>
                 </div>
 
                 <div class="formula-box">
-                    <p>💡 AIが導き出した現在の数式</p>
+                    <p>💡 AIが手探りで構築中の数式モデル</p>
                     <div id="dynamic-equation" class="equation">
-                        <span class="math-y">答え</span> = <span id="eq-w1">0.00</span><span class="math-var">A</span> <span id="eq-sign-w2">+</span> <span id="eq-w2">0.00</span><span class="math-var">B</span> <span id="eq-sign-b">+</span> <span id="eq-b">0.00</span>
+                        <!-- 動的に数式が組み立てられる -->
                     </div>
                 </div>
 
                 <div class="stats">
-                    <p>推理回数: <span id="epoch-count">0</span> 回 / ズレ (Loss): <span id="loss-text">0.000</span></p>
+                    <p>試行回数 (Epoch): <span id="epoch-count">0</span> 回</p>
+                    <p>全体のズレ (Loss): <span id="loss-text">0.00000</span></p>
                 </div>
+
                 <div class="graph-container">
                     <canvas id="lossChart" width="350" height="100"></canvas>
+                    <p class="caption">誤差（ズレ）の減少グラフ</p>
                 </div>
             </div>
         </div>
 
+        <!-- 学習完了時の詳細レポート -->
         <div id="result-panel" class="panel result-panel hidden">
-            <h2>🎉 法則を発見しました！</h2>
+            <h2>📊 4. AIによるデータの関係性レポート（法則の発見）</h2>
             <div class="result-content">
                 <div class="explanation">
-                    <h3>💬 AIの解説</h3>
-                    <p id="rule-description" class="rule-text">ここに解説が表示されます。</p>
-                    <h3>🤔 なぜこの式になったか？</h3>
-                    <p id="rule-reason" class="rule-reason-text">ここに理由が表示されます。</p>
+                    <h3>💬 AIによる数値の解析結果</h3>
+                    <p id="rule-description" class="rule-text"></p>
+                    <h3>🧐 パラメータ（重み）の数学的解釈</h3>
+                    <p id="rule-reason" class="rule-reason-text"></p>
                 </div>
                 <div class="visualization">
-                    <h3>🗺️ 法則の全体図（ヒートマップ）</h3>
-                    <canvas id="rule-canvas" width="250" height="250"></canvas>
-                    <p class="caption">※ 横軸がA、縦軸がB。色が答えの大きさ（赤=大、青=小）を表し、白丸があなたが入力したデータです。</p>
+                    <h3>🗺️ 法則の視覚化グラフ</h3>
+                    <canvas id="visual-canvas" width="300" height="300"></canvas>
+                    <p id="visual-caption" class="caption"></p>
                 </div>
             </div>
         </div>
