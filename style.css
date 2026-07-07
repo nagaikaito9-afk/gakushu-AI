@@ -19,84 +19,65 @@ body {
 }
 
 .container { width: 100%; max-width: 900px; }
-
 header { text-align: center; margin-bottom: 20px; }
 header h1 { color: var(--primary-color); margin-bottom: 5px; }
 
-.controls-panel {
-    background-color: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
+.dashboard { display: flex; gap: 20px; flex-wrap: wrap; }
+.panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; flex: 1; min-width: 350px; }
+.panel h2 { font-size: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; }
+
+/* 入力フォーム */
+.input-form {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.settings {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
-    background-color: #2a2a2a;
-    padding: 10px 15px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+    background: #2a2a2a;
+    padding: 10px;
     border-radius: 5px;
-    font-size: 0.9rem;
+}
+.input-form input { width: 60px; background: #111; color: white; border: 1px solid #444; padding: 5px; border-radius: 3px; text-align: center;}
+#addDataBtn { padding: 5px 10px; }
+
+/* データセットのリスト */
+.dataset-list {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.dataset-list li {
+    background-color: #0a0a0a;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid var(--secondary-color);
+    font-family: monospace;
+    font-size: 1.1rem;
 }
 
-.settings label { display: flex; align-items: center; gap: 8px; }
-.settings select, .settings input { background: #111; color: white; border: 1px solid #444; padding: 5px; border-radius: 3px; }
-
-.buttons { display: flex; justify-content: center; gap: 15px; }
-
-button {
-    background-color: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--primary-color);
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
+/* ボタン類 */
+.controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+button { background-color: transparent; color: var(--text-color); border: 1px solid var(--primary-color); padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
 button:hover { background-color: var(--primary-color); color: #000; }
 button.btn-primary { background-color: rgba(0, 255, 204, 0.1); }
 button.btn-danger { border-color: var(--error-color); }
 button.btn-danger:hover { background-color: var(--error-color); color: #fff; }
 
-.dashboard { display: flex; gap: 20px; flex-wrap: wrap; }
-.panel { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; flex: 1; min-width: 300px; }
-.panel h2 { font-size: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0; }
-
+/* 推理された数式 */
 .formula-box {
     background-color: #0a0a0a;
     padding: 15px;
     border-radius: 5px;
     text-align: center;
-    font-size: 1.1rem;
     margin: 15px 0;
-    border-left: 4px solid var(--secondary-color);
+    border: 1px solid #444;
 }
+.formula-box p { margin-top: 0; color: #aaa; font-size: 0.9rem;}
+.equation { font-size: 1.2rem; font-weight: bold; }
+.highlight { color: var(--secondary-color); font-size: 1.4rem; font-family: monospace; }
 
-.highlight { color: var(--secondary-color); font-weight: bold; font-family: monospace; font-size: 1.3rem;}
-.stats p { font-size: 1.1rem; margin: 5px 0; }
-
+.stats p { font-size: 1rem; margin: 5px 0; }
 .graph-container { margin-top: 20px; text-align: center; }
 canvas { background-color: #0a0a0a; border: 1px solid #333; border-radius: 5px; width: 100%; }
 small { color: #888; font-size: 0.8rem; }
-
-.log-container {
-    height: 350px;
-    overflow-y: auto;
-    background-color: #0a0a0a;
-    padding: 15px;
-    border-radius: 5px;
-    font-family: monospace;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-.log-entry { margin-bottom: 8px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
-.log-entry.bad { color: var(--error-color); }
-.log-entry.good { color: var(--primary-color); }

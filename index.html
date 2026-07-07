@@ -3,54 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 算数学習シミュレーター Pro</title>
+    <title>AI 法則推論シミュレーター</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>AI Learning Simulator Pro</h1>
-            <p>ゼロから算数の法則を自力で見つけるAI</p>
+            <h1>AI Rule Inference Simulator</h1>
+            <p>あなたが与えたデータから、AIが隠された「数式」を推理します</p>
         </header>
 
-        <div class="controls-panel">
-            <div class="settings">
-                <label>📚 教える内容: 
-                    <select id="operation-select">
-                        <option value="add">足し算 (A + B)</option>
-                        <option value="sub">引き算 (A - B)</option>
-                        <option value="avg">平均値 ((A + B) / 2)</option>
-                    </select>
-                </label>
-                <label>⚡ 学習スピード: <input type="range" id="speed-slider" min="1" max="100" value="10"> <span id="speed-val">10</span>倍速</label>
-                <label>🧠 学習の歩幅 (Learning Rate): <input type="range" id="lr-slider" min="0.001" max="0.05" step="0.001" value="0.01"> <span id="lr-val">0.01</span></label>
-            </div>
-            <div class="buttons">
-                <button id="startBtn" class="btn-primary">学習スタート</button>
-                <button id="pauseBtn">一時停止</button>
-                <button id="resetBtn" class="btn-danger">記憶をリセット</button>
-            </div>
-        </div>
-
         <div class="dashboard">
+            <div class="panel data-panel">
+                <h2>📝 1. AIに例題（データ）を与える</h2>
+                <p>AIに法則を見つけさせたい例題を入力してください。<br>
+                <small>※データが1つだけだと法則が絞れないので、2〜3個以上入力してください。</small></p>
+                
+                <div class="input-form">
+                    A: <input type="number" id="input-a" placeholder="例: 2">
+                    B: <input type="number" id="input-b" placeholder="例: 3">
+                    答え: <input type="number" id="input-ans" placeholder="例: 5">
+                    <button id="addDataBtn">データを追加</button>
+                </div>
+
+                <ul id="dataset-list" class="dataset-list">
+                    </ul>
+            </div>
+
             <div class="panel brain-panel">
-                <h2>🧠 AIの脳内ルール（重みとバイアス）</h2>
+                <h2>🧠 2. AIの推理（学習プロセス）</h2>
+                <div class="controls">
+                    <button id="startBtn" class="btn-primary">学習スタート</button>
+                    <button id="pauseBtn">一時停止</button>
+                    <button id="resetBtn" class="btn-danger">脳をリセット</button>
+                </div>
+
                 <div class="formula-box">
-                    <p>AIの回答 ＝ ( A × <span id="w1-val" class="highlight">0.00</span> ) ＋ ( B × <span id="w2-val" class="highlight">0.00</span> ) ＋ <span id="b-val" class="highlight">0.00</span></p>
+                    <p>💡 AIが導き出した現在の数式</p>
+                    <div class="equation">
+                        答え ＝ (A × <span id="w1-val" class="highlight">0.00</span>) ＋ (B × <span id="w2-val" class="highlight">0.00</span>) ＋ <span id="b-val" class="highlight">0.00</span>
+                    </div>
                 </div>
+
                 <div class="stats">
-                    <p>学習回数 (Epoch): <span id="epoch-count">0</span> 回</p>
-                    <p>現在の誤差 (Loss): <span id="loss-text">0.000</span></p>
+                    <p>推理回数 (Epoch): <span id="epoch-count">0</span> 回</p>
+                    <p>データとのズレ (Loss): <span id="loss-text">0.000</span></p>
                 </div>
+
                 <div class="graph-container">
                     <canvas id="lossChart" width="350" height="150"></canvas>
-                    <small>↑ 誤差がゼロに近づく（線が下がる）ほど賢くなっています</small>
+                    <small>↑ ズレがゼロ（一番下）になれば、完璧な数式を見つけた証拠です</small>
                 </div>
-            </div>
-
-            <div class="panel log-panel">
-                <h2>📝 学習プロセス（リアルタイム思考）</h2>
-                <div id="log-container" class="log-container"></div>
             </div>
         </div>
     </div>
