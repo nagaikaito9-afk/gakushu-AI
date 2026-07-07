@@ -37,7 +37,20 @@
         <div class="dashboard">
             <div class="panel data-panel">
                 <h2>📝 2. AIにヒント（データ）を教える</h2>
-                <p class="guide-text">「Aが〇〇で、Bが〇〇のとき、答えは〇〇になる」という例題をいくつか入力してね。</p>
+                
+                <div class="sample-box">
+                    <label>📖 面白いルールを試す：</label>
+                    <select id="sample-select">
+                        <option value="">-- 選んでね --</option>
+                        <option value="add">足し算 (A + B)</option>
+                        <option value="double_a">Aの2倍 (Bは無視)</option>
+                        <option value="complex">複雑な計算 (2A - B + 5)</option>
+                        <option value="average">平均値 ((A+B)/2)</option>
+                    </select>
+                    <button id="loadSampleBtn">データをセット！</button>
+                </div>
+
+                <p class="guide-text">自分で好きな例題を入力してもOKだよ！</p>
                 <div id="dynamic-input-form" class="input-form">
                     </div>
                 
@@ -84,10 +97,16 @@
                 <div class="explanation">
                     <h3>💬 AIによる「謎のルール」の解説</h3>
                     <div id="rule-description" class="rule-text"></div>
-                    <div class="ai-commentary">
-                        <strong>🤖 AIからのコメント：</strong><br>
-                        <p id="rule-reason" class="rule-reason-text"></p>
+                    
+                    <div class="prediction-box">
+                        <h3>🎯 新しい機能：AIをテストしてみよう！</h3>
+                        <p>見つけたルールを使って、AIに新しい問題を解かせてみよう。数値を入力してね。</p>
+                        <div id="predict-inputs" class="predict-inputs">
+                            </div>
+                        <button id="predictBtn">AIに答えを予想させる</button>
+                        <div class="predict-result">🤖 AIの予想：「<span id="predict-answer">???</span>」ですね！</div>
                     </div>
+
                 </div>
                 <div class="visualization">
                     <h3>🗺️ ルールのイメージ図</h3>

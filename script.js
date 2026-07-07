@@ -27,12 +27,37 @@ const ctxLoss = canvasLoss.getContext('2d');
 
 const resultPanel = document.getElementById('result-panel');
 const ruleDesc = document.getElementById('rule-description');
-const ruleReason = document.getElementById('rule-reason');
 const canvasVisual = document.getElementById('visual-canvas');
 const ctxVisual = canvasVisual.getContext('2d');
 const visualCaption = document.getElementById('visual-caption');
+const predictInputsContainer = document.getElementById('predict-inputs');
+const predictAnswer = document.getElementById('predict-answer');
 
 speedSlider.addEventListener('input', (e) => { speedVal.innerText = e.target.value; });
+
+// サンプル問題を読み込む機能
+document.getElementById('loadSampleBtn').addEventListener('click', () => {
+    const type = document.getElementById('sample-select').value;
+    if (!type) return alert("試したいルールを選んでね！");
+
+    // 全て2変数のサンプルなので、セレクトボックスを「2つ(AとB)」に強制変更
+    varCountSelect.value = "2";
+    rebuildUI();
+
+    dataset = [];
+    if (type === 'add') {
+        dataset.push([1, 2, 3], [5, 5, 10], [0, 8, 8], [-2, 4, 2], [10, -5, 5]);
+    } else if (type === 'double_a') {
+        dataset.push([3, 5, 6], [10, 1, 20], [0, 8, 0], [-4, 2, -8], [5, 100, 10]);
+    } else if (type === 'complex') {
+        dataset.push([1, 1, 6], [2, 0, 9], [0, 2, 3], [5, 5, 10], [10, 10, 15]); // 2A - B + 5
+    } else if (type === 'average') {
+        dataset.push([4, 6, 5], [10, 0, 5], [2, 2, 2], [-4, 4, 0], [100, 50, 75]); // (A+B)/2
+    }
+    
+    renderTable();
+    calculateCurrentLoss();
+});
 
 function getVarCount() { return parseInt(varCountSelect.value); }
 
@@ -131,34 +156,22 @@ function calculateCurrentLoss() {
     lossTextEl.textContent = (totalLoss / dataset.length).toFixed(5);
 }
 
-// 専門的な数式をやめて、直感的なブロック表示に変更！
 function updateEquationUI() {
     const count = getVarCount();
     let html = ``;
-    
     for (let i = 0; i < count; i++) {
         const w = weights[i];
         if (isNaN(w)) continue;
         const isDimmed = Math.abs(w) < 0.05;
         const className = isDimmed ? 'dimmed' : '';
-        
         if (i > 0) html += `<span>＋</span>`;
-        
-        // [ A × 2.00 ] のような見やすいバッジにする
         let operation = w >= 0 ? `× <span class="math-w">${w.toFixed(2)}</span>` : `× <span class="math-w" style="color:#ff5252">(${w.toFixed(2)})</span>`;
-        html += `<div class="term-badge ${className}">
-                    <span class="math-var">${alphabet[i]}</span> ${operation}
-                 </div>`;
+        html += `<div class="term-badge ${className}"><span class="math-var">${alphabet[i]}</span> ${operation}</div>`;
     }
-    
     const isBDimmed = Math.abs(bias) < 0.05;
     html += `<span>＋</span>`;
-    html += `<div class="term-badge ${isBDimmed ? 'dimmed' : ''}">
-                <span style="font-size:0.8rem; color:#aaa">基本点</span> <span class="math-b">${bias >= 0 ? '+' : ''}${bias.toFixed(2)}</span>
-             </div>`;
-             
+    html += `<div class="term-badge ${isBDimmed ? 'dimmed' : ''}"><span style="font-size:0.8rem; color:#aaa">基本点</span> <span class="math-b">${bias >= 0 ? '+' : ''}${bias.toFixed(2)}</span></div>`;
     html += `<span>＝</span> <div class="math-y">答え</div>`;
-    
     dynamicEquation.innerHTML = html;
     epochEl.textContent = epoch;
 }
@@ -221,7 +234,7 @@ function trainLoop() {
         drawLossGraph();
     }
 
-    if (mse < 0.00005) { // 判定を少し優しくしました
+    if (mse < 0.00005) {
         isTraining = false;
         lossTextEl.textContent = "0.00000 (カンペキ！)";
         lossTextEl.style.color = "#00e5ff";
@@ -230,45 +243,61 @@ function trainLoop() {
     } else {
         lossTextEl.style.color = "var(--text-color)";
     }
-
     animationId = requestAnimationFrame(trainLoop);
 }
 
-// 専門用語を排除し、誰でもわかる「得点ルール」として発表
 function generateAnalysisReport() {
     resultPanel.classList.remove('hidden');
     const count = getVarCount();
     
     let desc = "";
-    
     for (let i = 0; i < count; i++) {
         const w = weights[i];
         const isPositive = w >= 0;
         const actionText = isPositive ? "増える" : "減る";
         
+        // 【修正】「約」を追加しました！
         desc += `
         <div class="rule-item">
             <span>✨ 手がかり <strong>${alphabet[i]}</strong> が 1 増えると、答えは</span>
-            <span class="big-num">${Math.abs(w).toFixed(2)}</span>
-            <span>${actionText}</span>
+            <span>約 <span class="big-num">${Math.abs(w).toFixed(2)}</span> ${actionText}</span>
         </div>`;
     }
     
     desc += `
     <div class="rule-item rule-item-base">
         <span>🎁 なにも手がかりがない時（全部0の時）、最初から</span>
-        <span class="big-num big-num-base">${bias.toFixed(2)}</span>
-        <span>からスタートする</span>
+        <span>約 <span class="big-num big-num-base">${bias.toFixed(2)}</span> からスタートする</span>
     </div>`;
     
     ruleDesc.innerHTML = desc;
-    ruleReason.innerHTML = "実は私（AI）は、足し算や引き算の意味を全く知りません。<br>ただ、あなたがくれたデータを見比べて、「この数字がこれだけ増えたら、結果はこれくらい変わるな…」という<strong>影響力（倍率）</strong>だけをひたすら微調整しました。そして、すべてのデータでつじつまが合う【唯一の完璧なルール】を見つけたんです！";
-    
     drawDynamicVisualization();
+    buildPredictUI(); // テスト入力欄を作る
     
-    // スクロールして結果を見せる
     setTimeout(() => { resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
 }
+
+// AIにテストを出すUIを生成
+function buildPredictUI() {
+    const count = getVarCount();
+    let html = '';
+    for(let i = 0; i < count; i++) {
+        html += `<div>${alphabet[i]} = <input type="number" id="pred-var-${i}" value="10"></div>`;
+    }
+    predictInputsContainer.innerHTML = html;
+    predictAnswer.innerText = '???';
+}
+
+// AIにテストを解かせる計算ボタン
+document.getElementById('predictBtn').addEventListener('click', () => {
+    const count = getVarCount();
+    let ans = bias;
+    for(let i = 0; i < count; i++) {
+        const val = parseFloat(document.getElementById(`pred-var-${i}`).value) || 0;
+        ans += weights[i] * val;
+    }
+    predictAnswer.innerText = ans.toFixed(2);
+});
 
 function drawDynamicVisualization() {
     const count = getVarCount();
